@@ -1,4 +1,4 @@
-#include <Adafruit_Sensor.h>                       // Biblioteca DHT Sensor Adafruit 
+#include <Adafruit_Sensor.h>                       
 #include <DHT.h>
 #include <DHT_U.h>
 #include <LiquidCrystal_I2C.h>
@@ -6,12 +6,10 @@
 #define LCD_ADDR 0x27
 #define LCD_COLUMNS 16
 #define LCD_ROWS 2
-// selecione um sensor, retirando o comentário - duas barras
-#define DHTTYPE    DHT22                           // Sensor DHT11
-//#define DHTTYPE      DHT22                       // Sensor DHT22 ou AM2302
-#define DHTPIN 11                                   // Pino do Arduino conectado no Sensor(Data) 
-DHT_Unified dht(DHTPIN, DHTTYPE);                  // configurando o Sensor DHT - pino e tipo
-uint32_t delayMS;                                  // variável para atraso no tempo
+#define DHTTYPE    DHT22                                              
+#define DHTPIN 11                                   
+DHT_Unified dht(DHTPIN, DHTTYPE);                  
+uint32_t delayMS;                                  
 
 LiquidCrystal_I2C lcd(LCD_ADDR, LCD_COLUMNS, LCD_ROWS);
 
@@ -37,10 +35,10 @@ void setup() {
   pinMode(ledVermelho, OUTPUT);
   pinMode(buzzer, OUTPUT);
   Serial.begin(9600);
-  dht.begin();                                    // inicializa a função
+  dht.begin();                                  
   Serial.println("Usando o Sensor DHT");
   sensor_t sensor;
-  dht.temperature().getSensor(&sensor);           // imprime os detalhes do Sensor de Temperatura
+  dht.temperature().getSensor(&sensor);           
   Serial.println("------------------------------------");
   Serial.println("Temperatura");
   Serial.print  ("Sensor:       "); Serial.println(sensor.name);
@@ -48,7 +46,7 @@ void setup() {
   Serial.print  ("Valor min:    "); Serial.print(sensor.min_value); Serial.println(" *C");
   Serial.print  ("Resolucao:   "); Serial.print(sensor.resolution); Serial.println(" *C");
   Serial.println("------------------------------------");
-  dht.humidity().getSensor(&sensor);            // imprime os detalhes do Sensor de Umidade
+  dht.humidity().getSensor(&sensor);            
   Serial.println("------------------------------------");
   Serial.println("Umidade");
   Serial.print  ("Sensor:       "); Serial.println(sensor.name);
@@ -56,14 +54,14 @@ void setup() {
   Serial.print  ("Valor min:    "); Serial.print(sensor.min_value); Serial.println("%");
   Serial.print  ("Resolucao:   "); Serial.print(sensor.resolution); Serial.println("%");
   Serial.println("------------------------------------");
-  delayMS = sensor.min_delay / 1000;            // define o atraso entre as leituras
+  delayMS = sensor.min_delay / 1000;           
 }
 
 void loop() {
   int valorLuz = analogRead(ldrPin);
   Serial.println(valorLuz);
 
-  // Controle de LEDs e buzzer com base na luminosidade
+  
   if (valorLuz < LIMITE_OK) {
     digitalWrite(ledVerde, HIGH);
     digitalWrite(ledAmarelo, LOW);
@@ -85,7 +83,7 @@ void loop() {
     digitalWrite(buzzer, LOW);
   }
 
-  // Leitura e exibição da Temperatura
+  
   sensors_event_t event;
   dht.temperature().getEvent(&event);
   float temperatura = 0.0;
@@ -98,7 +96,7 @@ void loop() {
     Serial.println(" *C");
   }
 
-  // Leitura e exibição da Umidade
+  
   dht.humidity().getEvent(&event);
   float umidade = 0.0;
   if (isnan(event.relative_humidity)) {
@@ -110,11 +108,11 @@ void loop() {
     Serial.println("%");
   }
 
-  // Exibição no LCD
+  
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Temp: ");
-  lcd.print(temperatura, 1);  // 1 casa decimal
+  lcd.print(temperatura, 1);  
   lcd.print(" C");
 
   lcd.setCursor(0, 1);
@@ -124,7 +122,7 @@ void loop() {
 
   delay(3000);
 
-  // Exibe a luminosidade
+  
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Luminosidade:");
